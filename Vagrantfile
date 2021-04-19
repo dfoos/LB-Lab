@@ -1,7 +1,7 @@
 BOX_IMAGE = "ubuntu/xenial64"
 NODE_COUNT = 2
 CPU_COUNT = 1
-MEMORY_COUNT = 512
+MEMORY_SIZE = 512
 
 Vagrant.configure("2") do |config|
 #Build Node VMs
@@ -11,14 +11,14 @@ Vagrant.configure("2") do |config|
       subconfig.vm.hostname = "node#{i}"
       subconfig.vm.network :private_network, ip: "10.0.0.#{i + 10}"
       # configure provider (#set vcpu and memory to save resources on host)
-	  subconfig.vm.provider "virtualbox" do |vb|
-            vb.cpus = CPU_COUNT
-			vb.memory = MEMORY_COUNT
+      subconfig.vm.provider "virtualbox" do |vb|
+        vb.cpus = CPU_COUNT
+	vb.memory = MEMORY_SIZE
       end
-	  #subconfig.vm.provision "shell", path: "bootstrap/node_bootstrap.sh"
-	  subconfig.vm.provision :ansible_local do |ansible|
+      #subconfig.vm.provision "shell", path: "bootstrap/node_bootstrap.sh"
+      subconfig.vm.provision :ansible_local do |ansible|
         ansible.verbose = "v"
-	    ansible.playbook = "provision/playbook_web.yml"
+	ansible.playbook = "provision/playbook_web.yml"
       end
     end
   end
@@ -29,17 +29,15 @@ Vagrant.configure("2") do |config|
     subconfig.vm.hostname = "LB"
     subconfig.vm.network :private_network, ip: "10.0.0.10"
     # configure provider (#set vcpu and memory to save resources on host)
-	subconfig.vm.provider "virtualbox" do |vb|
-            vb.cpus = CPU_COUNT
-			vb.memory = MEMORY_COUNT
+    subconfig.vm.provider "virtualbox" do |vb|
+      vb.cpus = CPU_COUNT
+      vb.memory = MEMORY_SIZE
     end
-	#following line used for bootsrap file. using ansible playbook instead.
-	#subconfig.vm.provision "shell", path: "bootstrap/node_bootstrap.sh"
-	subconfig.vm.provision :ansible_local do |ansible|
-    ansible.verbose = "v"
-	ansible.playbook = "provision/playbook_lb.yml"
+    #following line used for bootsrap file. using ansible playbook instead.
+    #subconfig.vm.provision "shell", path: "bootstrap/node_bootstrap.sh"
+    subconfig.vm.provision :ansible_local do |ansible|
+      ansible.verbose = "v"
+      ansible.playbook = "provision/playbook_lb.yml"
    end
   end
 end
-  
-
