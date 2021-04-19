@@ -1,0 +1,14 @@
+---
+- name: "Install Web Service"
+  package:
+    name: "{{ simple_web.package }}"
+    state: present
+- name: "Start Web Service"
+  service:
+    name: "{{ simple_web.service }}"
+    state: started
+    enabled: yes
+- name: "Copy Web Content"
+  copy:
+    src: "{{ role_path }}/files/index.html"
+    dest: "{{ simple_web.docroot }}/index.html"
