@@ -12,3 +12,8 @@
   copy:
     src: "{{ role_path }}/files/index.html"
     dest: "{{ simple_web.docroot }}/index.html"
+- name: "Insert hostname into webpage"
+  ansible.builtin.lineinfile:
+    path: /var/www/html/index.html
+    regexp: '^    <h1>Simple Web</h1>'
+    line:   <h1>{{ ansible_hostname }}</h1>
